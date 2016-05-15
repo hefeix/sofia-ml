@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -19,7 +19,7 @@
 // Author: D. Sculley
 // dsculley@google.com or dsculley@cs.tufts.edu
 //
-// Main file for stochastic active set svm (sofia-ml), 
+// Main file for stochastic active set svm (sofia-ml),
 // a variant of the PEGASOS stochastic gradient svm solver.
 
 #include <assert.h>
@@ -43,88 +43,88 @@ void CommandLine(int argc, char** argv) {
   AddFlag("--model_in", "Read in a model from this file.", string(""));
   AddFlag("--model_out", "Write the model to this file.", string(""));
   AddFlag("--random_seed",
-	  "When set to non-zero value, use this seed instead of seed from system clock.\n"
-	  "    This can be useful for parameter tuning in cross-validation, as setting \n"
-	  "    a seed by hand forces examples to be sampled in the same order.  However\n"
-	  "    for actual training/test, this should never be used.\n"
-	  "    Default: 0",
-	  int(0));
-  AddFlag("--lambda", 
-	  "Value of lambda for svm regularization.\n"
-	  "    Default: 0.1",
-	  float(0.1));
+          "When set to non-zero value, use this seed instead of seed from system clock.\n"
+          "    This can be useful for parameter tuning in cross-validation, as setting \n"
+          "    a seed by hand forces examples to be sampled in the same order.  However\n"
+          "    for actual training/test, this should never be used.\n"
+          "    Default: 0",
+          int(0));
+  AddFlag("--lambda",
+          "Value of lambda for svm regularization.\n"
+          "    Default: 0.1",
+          float(0.1));
   AddFlag("--iterations",
-	  "Number of stochastic gradient steps to take.\n"
-	  "    Default: 100000",
-	  int(100000));
+          "Number of stochastic gradient steps to take.\n"
+          "    Default: 100000",
+          int(100000));
   AddFlag("--learner_type",
-	  "Type of learner to use.\n"
-	  "    Options are: pegasos, passive-aggressive, margin-perceptron, "
-	  "romma, sgd-svm, least-mean-squares, logreg, and logreg-pegasos.\n"
-	  "    Default: pegasos",
-	  string("pegasos"));
+          "Type of learner to use.\n"
+          "    Options are: pegasos, passive-aggressive, margin-perceptron, "
+          "romma, sgd-svm, least-mean-squares, logreg, and logreg-pegasos.\n"
+          "    Default: pegasos",
+          string("pegasos"));
   AddFlag("--eta_type",
-	  "Type of update for learning rate to use.\n"
-	  "    Options are: basic, pegasos, constant (0.02).\n"
-	  "    Default: pegasos",
-	  string("pegasos"));
+          "Type of update for learning rate to use.\n"
+          "    Options are: basic, pegasos, constant (0.02).\n"
+          "    Default: pegasos",
+          string("pegasos"));
   AddFlag("--loop_type",
-	  "Type of loop to use for training, controlling how examples are selected.\n"
-	  "    Options are: stochastic, balanced-stochastic, "
-	  "roc, rank, query-norm-rank, combined-ranking, "
-	  "combined-roc\n"
-	  "    Default: stochastic",
-	  string("stochastic"));
+          "Type of loop to use for training, controlling how examples are selected.\n"
+          "    Options are: stochastic, balanced-stochastic, "
+          "roc, rank, query-norm-rank, combined-ranking, "
+          "combined-roc\n"
+          "    Default: stochastic",
+          string("stochastic"));
   AddFlag("--prediction_type",
-	  "Type of predictions to compute on test data.\n"
-	  "    Options are: linear, logistic\n"
-	  "    Use linear for SVM predictions.\n"
-	  "    Default: linear",
-	  string("linear"));
+          "Type of predictions to compute on test data.\n"
+          "    Options are: linear, logistic\n"
+          "    Use linear for SVM predictions.\n"
+          "    Default: linear",
+          string("linear"));
   AddFlag("--rank_step_probability",
-	  "Probability that we will take a rank step (as opposed to a  \n"
-	  "    classification step) in a combined-ranking or "
-	  "    combined-roc loop.\n"
-	  "    Default: 0.5",
-	  float(0.5));
+          "Probability that we will take a rank step (as opposed to a  \n"
+          "    classification step) in a combined-ranking or "
+          "    combined-roc loop.\n"
+          "    Default: 0.5",
+          float(0.5));
   AddFlag("--passive_aggressive_c",
-	  "Maximum size of any step taken in a single passive-aggressive update.",
-	  float(10000000.0));
+          "Maximum size of any step taken in a single passive-aggressive update.",
+          float(10000000.0));
   AddFlag("--passive_aggressive_lambda",
-	  "Lambda for pegasos-style projection for passive-aggressive update.\n"
-	  "    When set to 0 (default) no projection is performed.",
-	  float(0));
+          "Lambda for pegasos-style projection for passive-aggressive update.\n"
+          "    When set to 0 (default) no projection is performed.",
+          float(0));
   AddFlag("--perceptron_margin_size",
-	  "Width of margin for perceptron with margins.\n"
-	  "    Default of 1 is equivalent to un-regularized SVM-loss.",
-	  float(1.0));
+          "Width of margin for perceptron with margins.\n"
+          "    Default of 1 is equivalent to un-regularized SVM-loss.",
+          float(1.0));
   AddFlag("--training_objective",
-	  "Compute value of objective function on training data, after training.\n"
-	  "    Default is not to do this.",
-	  bool(false));
+          "Compute value of objective function on training data, after training.\n"
+          "    Default is not to do this.",
+          bool(false));
   AddFlag("--buffer_mb",
-	  "Size of buffer to use in reading/writing to files, in MB.\n"
-	  "    Default: 40",
-	  int(40));
+          "Size of buffer to use in reading/writing to files, in MB.\n"
+          "    Default: 40",
+          int(40));
   AddFlag("--dimensionality",
-	  "Index value of largest feature index in training data set. \n"
-	  "    Default: 2^17 = 131072",
-	  int(2<<16));
+          "Index value of largest feature index in training data set. \n"
+          "    Default: 2^17 = 131072",
+          int(2<<16));
   AddFlag("--hash_mask_bits",
-	  "When set to a non-zero value, causes the use of a hashed weight vector\n"
-	  "    with hashed cross product features.  The size of the hash table is set\n"
-	  "    to 2^--hash_mask_bits.  The same value of this flag must be used for\n"
-	  "    testing and training.\n"
-	  "    Default value of 0 shows that hash cross products are not used.",
-	  int(0));
+          "When set to a non-zero value, causes the use of a hashed weight vector\n"
+          "    with hashed cross product features.  The size of the hash table is set\n"
+          "    to 2^--hash_mask_bits.  The same value of this flag must be used for\n"
+          "    testing and training.\n"
+          "    Default value of 0 shows that hash cross products are not used.",
+          int(0));
   AddFlag("--no_bias_term",
-	  "When set, causes a bias term x_0 to be set to 0 for every \n"
-	  "    feature vector loaded from files, rather than the default of x_0 = 1.\n"
-	  "    This is equivalent to forcing a decision threshold of exactly 0 to be used.\n"
-	  "    Same setting of this flag should be used for training and testing. Note that\n"
-	  "    this flag as no effect for rank and roc optimzation.\n"
-	  "    Default: not set.",
-	  bool(false));
+          "When set, causes a bias term x_0 to be set to 0 for every \n"
+          "    feature vector loaded from files, rather than the default of x_0 = 1.\n"
+          "    This is equivalent to forcing a decision threshold of exactly 0 to be used.\n"
+          "    Same setting of this flag should be used for training and testing. Note that\n"
+          "    this flag as no effect for rank and roc optimzation.\n"
+          "    Default: not set.",
+          bool(false));
   ParseFlags(argc, argv);
 }
 
@@ -164,7 +164,12 @@ void LoadModelFromFile(const string& file_name, SfWeightVector** w) {
   model_stream.close();
   std::cerr << "   Done." << std::endl;
 
-  *w = new SfWeightVector(model_string);
+  // *w = new SfWeightVector(model_string);
+  if (CMD_LINE_INTS["--hash_mask_bits"] == 0) {
+    *w = new SfWeightVector(model_string);
+  } else {
+    *w = new SfHashWeightVector(CMD_LINE_INTS["--hash_mask_bits"], model_string);
+  }
   assert(*w != NULL);
 }
 
@@ -187,7 +192,7 @@ void TrainModel (const SfDataSet& training_data, SfWeightVector* w) {
     std::cerr << "--eta type " << CMD_LINE_STRINGS["--eta_type"] << " not supported.";
     exit(0);
   }
- 
+
   sofia_ml::LearnerType learner_type;
   if (CMD_LINE_STRINGS["--learner_type"] == "pegasos")
     learner_type = sofia_ml::PEGASOS;
@@ -212,70 +217,70 @@ void TrainModel (const SfDataSet& training_data, SfWeightVector* w) {
     learner_type = sofia_ml::ROMMA;
   else {
     std::cerr << "--learner_type " << CMD_LINE_STRINGS["--learner_type"]
-	      << " not supported.";
+              << " not supported.";
     exit(0);
   }
-  
+
   if (CMD_LINE_STRINGS["--loop_type"] == "stochastic")
     sofia_ml::StochasticOuterLoop(training_data,
-				learner_type,
-				eta_type,
-				lambda,
-				c,
-				CMD_LINE_INTS["--iterations"],
-				w);
+                                learner_type,
+                                eta_type,
+                                lambda,
+                                c,
+                                CMD_LINE_INTS["--iterations"],
+                                w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "balanced-stochastic")
     sofia_ml::BalancedStochasticOuterLoop(training_data,
-					learner_type,
-					eta_type,
-					lambda,
-					c,
-					CMD_LINE_INTS["--iterations"],
-					w);
+                                        learner_type,
+                                        eta_type,
+                                        lambda,
+                                        c,
+                                        CMD_LINE_INTS["--iterations"],
+                                        w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "roc")
     sofia_ml::StochasticRocLoop(training_data,
-			      learner_type,
-			      eta_type,
-			      lambda,
-			      c,
-			      CMD_LINE_INTS["--iterations"],
-			      w);
+                              learner_type,
+                              eta_type,
+                              lambda,
+                              c,
+                              CMD_LINE_INTS["--iterations"],
+                              w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "rank")
     sofia_ml::StochasticRankLoop(training_data,
-			      learner_type,
-			      eta_type,
-			      lambda,
-			      c,
-			      CMD_LINE_INTS["--iterations"],
-			      w);
+                              learner_type,
+                              eta_type,
+                              lambda,
+                              c,
+                              CMD_LINE_INTS["--iterations"],
+                              w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "combined-ranking")
     sofia_ml::StochasticClassificationAndRankLoop(
-		training_data,
-		learner_type,
-		eta_type,
-		lambda,
-		c,
-		CMD_LINE_FLOATS["--rank_step_probability"],
-		CMD_LINE_INTS["--iterations"],
-		w);
+                training_data,
+                learner_type,
+                eta_type,
+                lambda,
+                c,
+                CMD_LINE_FLOATS["--rank_step_probability"],
+                CMD_LINE_INTS["--iterations"],
+                w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "combined-roc")
     sofia_ml::StochasticClassificationAndRocLoop(
-		training_data,
-		learner_type,
-		eta_type,
-		lambda,
-		c,
-		CMD_LINE_FLOATS["--rank_step_probability"],
-		CMD_LINE_INTS["--iterations"],
-		w);
+                training_data,
+                learner_type,
+                eta_type,
+                lambda,
+                c,
+                CMD_LINE_FLOATS["--rank_step_probability"],
+                CMD_LINE_INTS["--iterations"],
+                w);
   else if (CMD_LINE_STRINGS["--loop_type"] == "query-norm-rank")
     sofia_ml::StochasticQueryNormRankLoop(training_data,
-			      learner_type,
-			      eta_type,
-			      lambda,
-			      c,
-			      CMD_LINE_INTS["--iterations"],
-			      w);
+                              learner_type,
+                              eta_type,
+                              lambda,
+                              c,
+                              CMD_LINE_INTS["--iterations"],
+                              w);
   else {
     std::cerr << "--loop_type " << CMD_LINE_STRINGS["--loop_type"] << " not supported.";
     exit(0);
@@ -286,7 +291,7 @@ void TrainModel (const SfDataSet& training_data, SfWeightVector* w) {
 
 int main (int argc, char** argv) {
   CommandLine(argc, argv);
-  
+
   if (CMD_LINE_INTS["--random_seed"] == 0) {
     srand(time(NULL));
   } else {
@@ -304,17 +309,17 @@ int main (int argc, char** argv) {
 
   // Load model (overwriting empty model), if needed.
   if (!CMD_LINE_STRINGS["--model_in"].empty()) {
-    LoadModelFromFile(CMD_LINE_STRINGS["--model_in"], &w); 
+    LoadModelFromFile(CMD_LINE_STRINGS["--model_in"], &w);
   }
-  
+
   // Train model, if needed.
   if (!CMD_LINE_STRINGS["--training_file"].empty()) {
-    std::cerr << "Reading training data from: " 
-	      << CMD_LINE_STRINGS["--training_file"] << std::endl;
+    std::cerr << "Reading training data from: "
+              << CMD_LINE_STRINGS["--training_file"] << std::endl;
     clock_t read_data_start = clock();
     SfDataSet training_data(CMD_LINE_STRINGS["--training_file"],
-			    CMD_LINE_INTS["--buffer_mb"],
-			    !CMD_LINE_BOOLS["--no_bias_term"]);
+                            CMD_LINE_INTS["--buffer_mb"],
+                            !CMD_LINE_BOOLS["--no_bias_term"]);
     PrintElapsedTime(read_data_start, "Time to read training data: ");
 
     TrainModel(training_data, w);
@@ -323,13 +328,13 @@ int main (int argc, char** argv) {
     if (CMD_LINE_BOOLS["--training_objective"]) {
       clock_t compute_objective_start = clock();
       float objective = sofia_ml::SvmObjective(training_data,
-					      *w,
-					      CMD_LINE_BOOLS["--lambda"]);
+                                              *w,
+                                              CMD_LINE_BOOLS["--lambda"]);
       PrintElapsedTime(compute_objective_start,
-		       "Time to compute objective on training data: ");
+                       "Time to compute objective on training data: ");
       std::cout << "Value of objective function on training data after "
-		<< CMD_LINE_INTS["--iterations"] << " iterations: "
-		<< objective << std::endl;
+                << CMD_LINE_INTS["--iterations"] << " iterations: "
+                << objective << std::endl;
     }
   }
 
@@ -337,17 +342,17 @@ int main (int argc, char** argv) {
   if (!CMD_LINE_STRINGS["--model_out"].empty()) {
     SaveModelToFile(CMD_LINE_STRINGS["--model_out"], w);
   }
-    
+
   // Test model on test data, if needed.
   if (!CMD_LINE_STRINGS["--test_file"].empty()) {
-    std::cerr << "Reading test data from: " 
-	      << CMD_LINE_STRINGS["--test_file"] << std::endl;
+    std::cerr << "Reading test data from: "
+              << CMD_LINE_STRINGS["--test_file"] << std::endl;
     clock_t read_data_start = clock();
     SfDataSet test_data(CMD_LINE_STRINGS["--test_file"],
-			CMD_LINE_INTS["--buffer_mb"],
-			!CMD_LINE_BOOLS["--no_bias_term"]);
+                        CMD_LINE_INTS["--buffer_mb"],
+                        !CMD_LINE_BOOLS["--no_bias_term"]);
     PrintElapsedTime(read_data_start, "Time to read test data: ");
-    
+
     vector<float> predictions;
     clock_t predict_start = clock();
     if (CMD_LINE_STRINGS["--prediction_type"] == "linear")
@@ -356,25 +361,25 @@ int main (int argc, char** argv) {
       sofia_ml::LogisticPredictionsOnTestSet(test_data, *w, &predictions);
     else {
       std::cerr << "--prediction " << CMD_LINE_STRINGS["--prediction_type"]
-		<< " not supported.";
+                << " not supported.";
       exit(0);
     }
 
     PrintElapsedTime(predict_start, "Time to make test prediction results: ");
-    
+
     std::fstream prediction_stream;
     prediction_stream.open(CMD_LINE_STRINGS["--results_file"].c_str(),
-			   std::fstream::out);
+                           std::fstream::out);
     if (!prediction_stream) {
-      std::cerr << "Error opening test results output file " 
-		<< CMD_LINE_STRINGS["--results_file"] << std::endl;
+      std::cerr << "Error opening test results output file "
+                << CMD_LINE_STRINGS["--results_file"] << std::endl;
       exit(1);
     }
     std::cerr << "Writing test results to: "
-	      << CMD_LINE_STRINGS["--results_file"] << std::endl;
+              << CMD_LINE_STRINGS["--results_file"] << std::endl;
     for (unsigned int i = 0; i < predictions.size(); ++i) {
-      prediction_stream << predictions[i] << "\t" 
-			<< test_data.VectorAt(i).GetY() << std::endl;
+      prediction_stream << predictions[i] << "\t"
+                        << test_data.VectorAt(i).GetY() << std::endl;
     }
     prediction_stream.close();
     std::cerr << "   Done." << std::endl;

@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -14,7 +14,7 @@
 // limitations under the License.                                                 //
 //================================================================================//
 //
-// sf-weight-vector.h
+// sf-hash-weight-vector.h
 //
 // Author: D. Sculley
 // dsculley@google.com or dsculley@cs.tufts.edu
@@ -43,7 +43,7 @@ class SfHashWeightVector : public SfWeightVector {
 
   // Constructs a weight vector from a string, using the defined number of hash_mask_bits.
   SfHashWeightVector(int hash_mask_bits,
-		     const string& weight_vector_string);
+                     const string& weight_vector_string);
 
   // Frees the array of weights.
   virtual ~SfHashWeightVector();
@@ -53,9 +53,9 @@ class SfHashWeightVector : public SfWeightVector {
   // of all features in x, where each of these features is hashed
   // to some new feature id from 0 to 2^num_bits_for_hash_ - 1.
   virtual float InnerProduct(const SfSparseVector& x,
-			     float x_scale = 1.0) const;
-  
-  // w += phi(x_scale * x), where phi is defined as for InnerProduct above. 
+                             float x_scale = 1.0) const;
+
+  // w += phi(x_scale * x), where phi is defined as for InnerProduct above.
   virtual void AddVector(const SfSparseVector& x, float x_scale);
 
  private:

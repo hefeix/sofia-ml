@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -14,12 +14,12 @@
 // limitations under the License.                                                 //
 //================================================================================//
 //
-// sf-weight-vector.cc
+// sf-hash-weight-vector.cc
 //
 // Author: D. Sculley
 // dsculley@google.com or dsculley@cs.tufts.edu
 //
-// Implementation of sf-weight-vector.h
+// Implementation of sf-hash-weight-vector.h
 
 #include <cstdlib>
 #include <iostream>
@@ -32,37 +32,38 @@
 //---------------- SfHashWeightVector Public Methods ----------------//
 //-------------------------------------------------------------------//
 
-SfHashWeightVector::SfHashWeightVector(int hash_mask_bits) 
+SfHashWeightVector::SfHashWeightVector(int hash_mask_bits)
   : SfWeightVector(1 << hash_mask_bits),
     hash_mask_bits_(hash_mask_bits) {
   if (hash_mask_bits_ < 0) {
     std::cerr << "Illegal number of hash_mask_bits for of weight vector less than 1."
-	      << std::endl << "hash_mask_bits__: " << dimensions_ << std::endl;
+              << std::endl << "hash_mask_bits__: " << dimensions_ << std::endl;
     exit(1);
   }
   hash_mask_ = SfHashMask(hash_mask_bits);
 
-  std::cout << "hash_mask_ " << hash_mask_ << std::endl;
+  std::cerr << "hash_mask_ " << hash_mask_ << std::endl;
 }
 
 SfHashWeightVector::SfHashWeightVector(int hash_mask_bits,
-				       const string& weight_vector_string) 
+                                       const string& weight_vector_string)
   : SfWeightVector(weight_vector_string),
     hash_mask_bits_(hash_mask_bits) {
   if (hash_mask_bits_ < 0) {
     std::cerr << "Illegal number of hash_mask_bits for of weight vector less than 1." << std::endl
-	      << "hash_mask_bits__: " << dimensions_ << std::endl;
+              << "hash_mask_bits__: " << dimensions_ << std::endl;
     exit(1);
   }
   hash_mask_ = SfHashMask(hash_mask_bits);
 }
 
 SfHashWeightVector::~SfHashWeightVector() {
-  delete[] weights_;
+  // NOTE(jason): already deleted in parent destructor.
+  // delete[] weights_;
 }
 
 float SfHashWeightVector::InnerProduct(const SfSparseVector& x,
-				       float x_scale) const {
+                                       float x_scale) const {
   float inner_product = 0.0;
   for (int i = 0; i < x.NumFeatures(); ++i) {
     inner_product +=
@@ -73,8 +74,8 @@ float SfHashWeightVector::InnerProduct(const SfSparseVector& x,
     int x_i_feature = x.FeatureAt(i);
     for (int j = i; j < x.NumFeatures(); ++j) {
       inner_product +=
-	weights_[SfHash(x_i_feature, x.FeatureAt(j), hash_mask_)] * 
-	x_i_value * x.ValueAt(j);
+        weights_[SfHash(x_i_feature, x.FeatureAt(j), hash_mask_)] *
+        x_i_value * x.ValueAt(j);
     }
   }
   inner_product *= x_scale;
@@ -83,7 +84,7 @@ float SfHashWeightVector::InnerProduct(const SfSparseVector& x,
 }
 
 void SfHashWeightVector::AddVector(const SfSparseVector& x,
-				   float x_scale) {
+                                   float x_scale) {
   float inner_product = 0.0;
   float norm_x = 0.0;
 
@@ -92,8 +93,8 @@ void SfHashWeightVector::AddVector(const SfSparseVector& x,
     int this_x_feature = SfHash(x.FeatureAt(i), hash_mask_);
     if (this_x_feature >= dimensions_) {
       std::cerr << "Error: feature hash id " << this_x_feature
-		<< " exceeds weight vector dimension " << dimensions_
-		<< std::endl;
+                << " exceeds weight vector dimension " << dimensions_
+                << std::endl;
       exit(1);
     }
     norm_x += this_x_value * this_x_value;
@@ -107,14 +108,14 @@ void SfHashWeightVector::AddVector(const SfSparseVector& x,
       float this_x_value = x_i_value * x.ValueAt(j) * x_scale;
       int this_x_feature = SfHash(x_i_feature, x.FeatureAt(j), hash_mask_);
       if (this_x_feature >= dimensions_) {
-	std::cerr << "Error: cross-product feature hash id " << this_x_feature
-		  << " exceeds weight vector dimension " << dimensions_;
-	exit(1);
+        std::cerr << "Error: cross-product feature hash id " << this_x_feature
+                  << " exceeds weight vector dimension " << dimensions_;
+        exit(1);
       }
       norm_x += this_x_value * this_x_value;
       inner_product += weights_[this_x_feature] * this_x_value;
       weights_[this_x_feature] += this_x_value / scale_;
     }
   }
-  squared_norm_ += norm_x + (2.0 * scale_ * inner_product); 
+  squared_norm_ += norm_x + (2.0 * scale_ * inner_product);
 }
