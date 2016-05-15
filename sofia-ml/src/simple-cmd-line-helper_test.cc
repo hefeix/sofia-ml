@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -36,7 +36,7 @@ int main (int argc, char** argv) {
 
   // Fill in dummy data for testing.
   char* cmdline[8] = { "./a.out", "--name", "no-name", "--number", "1",
-			  "--frac", "0.5", "--ask"};
+                       "--frac", "0.5", "--ask"};
   argv = cmdline;
   argc = 8;
 

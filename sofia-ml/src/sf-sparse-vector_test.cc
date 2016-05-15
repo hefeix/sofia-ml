@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -56,8 +56,8 @@ int main (int argc, char** argv) {
   assert(x4.ValueAt(1) == 0.0);
 
   SfSparseVector x5(SfSparseVector("1.0 1:1.0 2:-1.0 3:4.5"),
-		     SfSparseVector("0.0 2:2.0 4:3.0"),
-		     -1.0);
+                    SfSparseVector("0.0 2:2.0 4:3.0"),
+                    -1.0);
   assert(x5.GetY() == -1.0);
   assert(x5.ValueAt(1) == 1.0 && x5.FeatureAt(1) == 1);
   assert(x5.ValueAt(2) == -3.0 && x5.FeatureAt(2) == 2);

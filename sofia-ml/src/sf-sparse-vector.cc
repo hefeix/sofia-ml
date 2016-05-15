@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -28,7 +28,7 @@
 //---------------- SfSparseVector Public Methods ----------------//
 //----------------------------------------------------------------//
 SfSparseVector::SfSparseVector(const char* in_string)
-  : y_(0.0), 
+  : y_(0.0),
     a_(0.0),
     squared_norm_(0.0),
     group_id_("") {
@@ -37,8 +37,8 @@ SfSparseVector::SfSparseVector(const char* in_string)
 }
 
 SfSparseVector::SfSparseVector(const char* in_string,
-			       bool use_bias_term)
-  : y_(0.0), 
+                               bool use_bias_term)
+  : y_(0.0),
     a_(0.0),
     squared_norm_(0.0),
     group_id_("") {
@@ -51,8 +51,8 @@ SfSparseVector::SfSparseVector(const char* in_string,
 }
 
 SfSparseVector::SfSparseVector(const SfSparseVector& a,
-				 const SfSparseVector& b,
-				 float y) 
+                                 const SfSparseVector& b,
+                                 float y)
   : y_(y),
     a_(0.0),
     squared_norm_(0.0) {
@@ -128,7 +128,7 @@ void SfSparseVector::DieFormat(const string& reason) {
 void SfSparseVector::Init(const char* in_string) {
   int length = strlen(in_string);
   if (length == 0) DieFormat("Empty example string.");
- 
+
   // Get class label.
   if (!sscanf(in_string, "%f", &y_))
     DieFormat("Class label must be real number.");
@@ -142,23 +142,23 @@ void SfSparseVector::Init(const char* in_string) {
     const char* end = strchr(position, ' ');
     char group_id_c_string[1000];
     strncpy(group_id_c_string, position, end - position);
-    group_id_ = group_id_c_string;
+    group_id_.assign(group_id_c_string, end - position);
     position = end + 1;
-  } 
+  }
 
   // Get feature:value pairs.
   for ( ;
-       (position < in_string + length 
-	&& position - 1 != NULL
-	&& position[0] != '#');
+       (position < in_string + length
+        && position - 1 != NULL
+        && position[0] != '#');
        position = strchr(position, ' ') + 1) {
-    
+
     // Consume multiple spaces, if needed.
     if (position[0] == ' ' || position[0] == '\n' ||
-	position[0] == '\v' || position[0] == '\r') {
+        position[0] == '\v' || position[0] == '\r') {
       continue;
     };
-    
+
     // Parse the feature-value pair.
     int id = atoi(position);
     position = strchr(position, ':') + 1;
