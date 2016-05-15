@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -59,12 +59,12 @@ class SfWeightVector {
 
   // Computes inner product of <x_scale * x, w>
   virtual float InnerProduct(const SfSparseVector& x,
-			     float x_scale = 1.0) const;
+                             float x_scale = 1.0) const;
 
   // Computes inner product of <x_scale * (a - b), w>
   float InnerProductOnDifference(const SfSparseVector& a,
-				 const SfSparseVector& b,
-				 float x_scale = 1.0) const;
+                                 const SfSparseVector& b,
+                                 float x_scale = 1.0) const;
 
   // w += x_scale * x
   virtual void AddVector(const SfSparseVector& x, float x_scale);
@@ -81,7 +81,7 @@ class SfWeightVector {
   // Project this vector into the L1 ball of radius at most lambda, plus or
   // minus epsilon / 2.
   void ProjectToL1Ball(float lambda, float epsilon);
-  
+
   // Getters.
   double GetSquaredNorm() const { return squared_norm_; }
   int GetDimensions() const { return dimensions_; }

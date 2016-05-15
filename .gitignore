@@ -1,9 +1,9 @@
+# ml
+sofia-ml/sofia-ml
+sofia-ml/src/sofia-ml
 sofia-ml/src/*_test
 
-# ml
-sofia-ml/src/sofia-ml
-sofia-ml/sofia-ml
-
 # kmeans
-sofia-ml/cluster-src/sofia-kmeans
 sofia-ml/sofia-kmeans
+sofia-ml/cluster-src/sofia-kmeans
+sofia-ml/cluster-src/*_test

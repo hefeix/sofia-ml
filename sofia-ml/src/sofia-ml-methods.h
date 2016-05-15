@@ -38,7 +38,7 @@ namespace sofia_ml {
   // a given data set.
   //  For each method, the parameters are described as follows:
   //   training_set  an SfDataSet filled with labeled training data.
-  //   learner_type  a LearnerType enum value (defined above) 
+  //   learner_type  a LearnerType enum value (defined above)
   //                   showing which learner to use.
   //   eta_type      an EtaType enum showing how to update the learning rate.
   //   lambda        regularization parameter (ignored by some LearnerTypes)
@@ -61,14 +61,14 @@ namespace sofia_ml {
   // Learning rate Eta may be set in different ways.
   enum EtaType {
     BASIC_ETA,  // On step i, eta = 1000 / (1000 + i)
-    PEGASOS_ETA,  // On step i, eta = 1.0 / (lambda * i) 
+    PEGASOS_ETA,  // On step i, eta = 1.0 / (lambda * i)
     CONSTANT  // Use constant eta = 0.02 for all steps.
   };
 
   // Trains a model w over training_set, using learner_type and eta_type learner with
   // given parameters.  For each iteration, samples one example uniformly at random from
   // training set.  Each example in the training_set has an equal probability of being
-  // selected on any given set; this is the training method to use for training a 
+  // selected on any given set; this is the training method to use for training a
   // standard binary-class classifier.
   void StochasticOuterLoop(const SfDataSet& training_set,
                            LearnerType learner_type,
@@ -97,30 +97,30 @@ namespace sofia_ml {
   // at random from the set of all negatives.  We then take a rank step of the difference
   // of these two vectors.  This optimizes area under the ROC curve.
   void StochasticRocLoop(const SfDataSet& training_set,
-			 LearnerType learner_type,
-			 EtaType eta_type,
-			 float lambda,
-			 float c,
-			 int num_iters,
-			 SfWeightVector* w);
+                         LearnerType learner_type,
+                         EtaType eta_type,
+                         float lambda,
+                         float c,
+                         int num_iters,
+                         SfWeightVector* w);
 
   void StochasticClassificationAndRocLoop(const SfDataSet& training_set,
-					   LearnerType learner_type,
-					   EtaType eta_type,
-					   float lambda,
-					   float c,
-					   float rank_step_probability,
-					   int num_iters,
-					   SfWeightVector* w);
+                                           LearnerType learner_type,
+                                           EtaType eta_type,
+                                           float lambda,
+                                           float c,
+                                           float rank_step_probability,
+                                           int num_iters,
+                                           SfWeightVector* w);
 
   void StochasticClassificationAndRankLoop(const SfDataSet& training_set,
-					   LearnerType learner_type,
-					   EtaType eta_type,
-					   float lambda,
-					   float c,
-					   float rank_step_probability,
-					   int num_iters,
-					   SfWeightVector* w);
+                                           LearnerType learner_type,
+                                           EtaType eta_type,
+                                           float lambda,
+                                           float c,
+                                           float rank_step_probability,
+                                           int num_iters,
+                                           SfWeightVector* w);
 
   // Trains a model w over training_set, using learner_type and eta_type learner with
   // given parameters.  Trains a model using the RankSVM objective function, using
@@ -128,23 +128,23 @@ namespace sofia_ml {
   // (pairs of examples in the same query but with different rank), training on
   // the difference of the two vectors in the pair.
   void StochasticRankLoop(const SfDataSet& training_set,
-			  LearnerType learner_type,
-			  EtaType eta_type,
-			  float lambda,
-			  float c,
-			  int num_iters,
-			  SfWeightVector* w);
+                          LearnerType learner_type,
+                          EtaType eta_type,
+                          float lambda,
+                          float c,
+                          int num_iters,
+                          SfWeightVector* w);
 
   // Optimize RankSVM objective function, but weight each query-id equally (even if some queries
   // have very few or very many examples).  Currently this is implemented using rejection-sampling,
   // which is slower than indexed-based sampling.
   void StochasticQueryNormRankLoop(const SfDataSet& training_set,
-				   LearnerType learner_type,
-				   EtaType eta_type,
-				   float lambda,
-				   float c,
-				   int num_iters,
-				   SfWeightVector* w);
+                                   LearnerType learner_type,
+                                   EtaType eta_type,
+                                   float lambda,
+                                   float c,
+                                   int num_iters,
+                                   SfWeightVector* w);
 
   //------------------------------------------------------------------------------//
   //                    Methods for Applying a Model on Data                      //
@@ -152,27 +152,27 @@ namespace sofia_ml {
 
   // Computes a single linear prediction, returning f(x) = < x, w >
   float SingleSvmPrediction(const SfSparseVector& x,
-			    const SfWeightVector& w);
+                            const SfWeightVector& w);
 
   // Computes a single linear prediction, returning f(x) = e(< x, w >) / (1.0 + e(< x, w >))
   float SingleLogisticPrediction(const SfSparseVector& x,
-				 const SfWeightVector& w);
+                                 const SfWeightVector& w);
 
   // Performs a SingleSvmPrediction on each example in test_data.
   void SvmPredictionsOnTestSet(const SfDataSet& test_data,
-			       const SfWeightVector& w,
-			       vector<float>* predictions);
+                               const SfWeightVector& w,
+                               vector<float>* predictions);
 
   // Performs a SingleLogisticPrediction on each example in test_data.
   void LogisticPredictionsOnTestSet(const SfDataSet& test_data,
-				    const SfWeightVector& w,
-				    vector<float>* predictions);
+                                    const SfWeightVector& w,
+                                    vector<float>* predictions);
 
   // Computes the value of binary class SVM objective function on the given data set, given a
   // model w and a value of the regularization parameter lambda.
   float SvmObjective(const SfDataSet& data_set,
-		     const SfWeightVector& w,
-		     float lambda);
+                     const SfWeightVector& w,
+                     float lambda);
 
   //--------------------------------------------------------------
   //          Single Stochastic Step Strategy Methods
@@ -181,21 +181,21 @@ namespace sofia_ml {
   // Takes one step using the LearnerType defined by method, and returns true
   // iff the method took a gradient step (ie, modified the model).
   bool OneLearnerStep(LearnerType method,
-		      const SfSparseVector& x,
-		      float eta,
-		      float c,
-		      float lambda,
-		      SfWeightVector* w);
+                      const SfSparseVector& x,
+                      float eta,
+                      float c,
+                      float lambda,
+                      SfWeightVector* w);
 
   // Takes one rank (a-b) step using the LearnerType defined by method, and returns true
   // iff the method took a gradient step (mod.
   bool OneLearnerRankStep(LearnerType method,
-			  const SfSparseVector& a,
-			  const SfSparseVector& b,
-			  float eta,
-			  float c,
-			  float lambda,
-			  SfWeightVector* w);
+                          const SfSparseVector& a,
+                          const SfSparseVector& b,
+                          float eta,
+                          float c,
+                          float lambda,
+                          SfWeightVector* w);
 
   //------------------------------------------------------------------------------//
   //                         LearnerType Methods                                  //
@@ -204,52 +204,52 @@ namespace sofia_ml {
   // Takes a single PEGASOS step, including regularization and projection.
   // Returns true iff the example x was violating KKT conditions.
   bool SinglePegasosStep(const SfSparseVector& x,
-			 float eta,
-			 float lambda,
-			 SfWeightVector* w);
+                         float eta,
+                         float lambda,
+                         SfWeightVector* w);
 
   // Takes a single SGD SVM step, including regularization.
   // Returns true iff the example x was violating KKT conditions.
   bool SingleSgdSvmStep(const SfSparseVector& x,
-			float eta,
-			float lambda,
-			SfWeightVector* w);
+                        float eta,
+                        float lambda,
+                        SfWeightVector* w);
 
   // Takes a single PEGASOS step using logistic loss function (logistic
   // regression) rather than hinge loss function (SVM loss).  Includes
   // L2 regularization and projection.  Always returns true, as updates
   // are performed for all examples.
   bool SinglePegasosLogRegStep(const SfSparseVector& x,
-			       float eta,
-			       float lambda,
-			       SfWeightVector* w);
+                               float eta,
+                               float lambda,
+                               SfWeightVector* w);
 
   // Takes a single SDG step using logistic loss function (logistic
   // regression) rather than hinge loss function (SVM loss).  Includes
   // L2 regularization. Always returns true.
   bool SingleLogRegStep(const SfSparseVector& x,
-			float eta,
-			float lambda,
-			SfWeightVector* w);
-  
+                        float eta,
+                        float lambda,
+                        SfWeightVector* w);
+
   // Takes a single PEGASOS step using least-mean-squares objective function
   // rather than hinge loss function (SVM loss).  Includes L2 regularization
   // and projection.  Always returns true, as updates are performed for all
   // examples.
   bool SingleLeastMeanSquaresStep(const SfSparseVector& x,
-				  float eta,
-				  float lambda,
-				  SfWeightVector* w);
+                                  float eta,
+                                  float lambda,
+                                  SfWeightVector* w);
 
   // Takes a single margin-perceptron step (with margin size = c).
   bool SingleMarginPerceptronStep(const SfSparseVector& x,
-				  float eta,
-				  float c,
-				  SfWeightVector* w);
+                                  float eta,
+                                  float c,
+                                  SfWeightVector* w);
 
   // Takes a single ROMMA step.
   bool SingleRommaStep(const SfSparseVector& x,
-		       SfWeightVector* w);
+                       SfWeightVector* w);
 
   // Takes a single RANK step with PEGASOS, including regularization and
   // projection, using vector defined by (a - b), with
@@ -257,10 +257,10 @@ namespace sofia_ml {
   // and y = 0 otherwise. Returns true iff the example x was violating KKT
   // conditions and y != 0.
   bool SinglePegasosRankStep(const SfSparseVector& a,
-			     const SfSparseVector& b,
-			     float eta,
-			     float lambda,
-			     SfWeightVector* w);
+                             const SfSparseVector& b,
+                             float eta,
+                             float lambda,
+                             SfWeightVector* w);
 
   // Takes a single step with SGD SVM, including regularization and
   // projection, using vector defined by (a - b), with
@@ -268,31 +268,31 @@ namespace sofia_ml {
   // and y = 0 otherwise. Returns true iff the example x was violating KKT
   // conditions and y != 0.
   bool SingleSgdSvmRankStep(const SfSparseVector& a,
-			     const SfSparseVector& b,
-			     float eta,
-			     float lambda,
-			     SfWeightVector* w);
+                             const SfSparseVector& b,
+                             float eta,
+                             float lambda,
+                             SfWeightVector* w);
 
   // Takes a single ROMMA rank step.
   bool SingleRommaRankStep(const SfSparseVector& a,
-			   const SfSparseVector& b,
-			   SfWeightVector* w);
+                           const SfSparseVector& b,
+                           SfWeightVector* w);
 
   // Takes a single margin-perceptron step (with margin size = c), on the
   // vector (a-b).
   bool SingleMarginPerceptronRankStep(const SfSparseVector& a,
-				      const SfSparseVector& b,
-				      float eta,
-				      float c,
-				      SfWeightVector* w);
+                                      const SfSparseVector& b,
+                                      float eta,
+                                      float c,
+                                      SfWeightVector* w);
 
   // Takes a single margin-perceptron step (with margin size = c), on the
   // vector (a-b).
   bool SingleLeastMeanSquaresRankStep(const SfSparseVector& a,
-				      const SfSparseVector& b,
-				      float eta,
-				      float c,
-				      SfWeightVector* w);
+                                      const SfSparseVector& b,
+                                      float eta,
+                                      float c,
+                                      SfWeightVector* w);
 
   // Takes a single logistic regression step on vector (a-b), using pegasos
   // projection for regularization.
@@ -305,10 +305,10 @@ namespace sofia_ml {
   // Takes a single logistic regression step on vector (a-b), using lambda
   // regularization.
   bool SingleLogRegRankStep(const SfSparseVector& a,
-			    const SfSparseVector& b,
-			    float eta,
-			    float lambda,
-			    SfWeightVector* w);
+                            const SfSparseVector& b,
+                            float eta,
+                            float lambda,
+                            SfWeightVector* w);
 
 
   // Takes a single RANK WITH TIES step using PEGASOS, including regularization
@@ -325,9 +325,9 @@ namespace sofia_ml {
   // lambda is greater than 0.0.  Returns true iff the example x was
   // violating KKT conditions.
   bool SinglePassiveAggressiveStep(const SfSparseVector& x,
-				   float lambda,
-				   float max_step,
-				   SfWeightVector* w);
+                                   float lambda,
+                                   float max_step,
+                                   SfWeightVector* w);
 
   // Takes a single RANK step with Passive-Aggressive method including
   // projection, using vector defined by (a - b), with
@@ -335,10 +335,10 @@ namespace sofia_ml {
   // and y = 0 otherwise. Returns true iff the example x was violating KKT
   // conditions and y != 0.
   bool SinglePassiveAggressiveRankStep(const SfSparseVector& a,
-				       const SfSparseVector& b,
-				       float lambda,
-				       float max_step,
-				       SfWeightVector* w);
+                                       const SfSparseVector& b,
+                                       float lambda,
+                                       float max_step,
+                                       SfWeightVector* w);
 
   //-------------------------------------------------------------------
   //                    Non-Member Utility Functions
@@ -347,7 +347,7 @@ namespace sofia_ml {
   // Performs the PEGASOS projection step, projecting w back so that it
   // in the feasible set of solutions.
   void PegasosProjection(float lambda,
-			 SfWeightVector* w);
+                         SfWeightVector* w);
 
   // Perform L2 regularization step, penalizing squared norm of
   // weight vector w.  Note that this regularization step is accomplished
@@ -360,10 +360,10 @@ namespace sofia_ml {
   // implied steps.  Does so by using:
   // w <- w * ((1 - (eta * lambda)) ^ effective_steps)
   void L2RegularizeSeveralSteps(float eta,
-				float lambda,
-				float effective_steps,
-				SfWeightVector* w);
-  
+                                float lambda,
+                                float effective_steps,
+                                SfWeightVector* w);
+
 }  // namespace sofia_ml
 
 #endif  // SOFIA_ML_METHODS_H__

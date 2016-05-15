@@ -33,8 +33,8 @@
 //-------------------------------------------------------------------//
 
 SfHashWeightVector::SfHashWeightVector(int hash_mask_bits)
-  : SfWeightVector(1 << hash_mask_bits),
-    hash_mask_bits_(hash_mask_bits) {
+    : SfWeightVector(1 << hash_mask_bits),
+      hash_mask_bits_(hash_mask_bits) {
   if (hash_mask_bits_ < 0) {
     std::cerr << "Illegal number of hash_mask_bits for of weight vector less than 1."
               << std::endl << "hash_mask_bits__: " << dimensions_ << std::endl;

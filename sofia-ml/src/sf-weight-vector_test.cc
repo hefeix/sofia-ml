@@ -1,6 +1,6 @@
 //================================================================================//
 // Copyright 2009 Google Inc.                                                     //
-//                                                                                // 
+//                                                                                //
 // Licensed under the Apache License, Version 2.0 (the "License");                //
 // you may not use this file except in compliance with the License.               //
 // You may obtain a copy of the License at                                        //
@@ -33,7 +33,7 @@ int main (int argc, char** argv) {
   assert(w_5.ValueOf(4) == 6.0);
   assert(w_5.ValueOf(6) == 0.0);
   assert(w_5.GetSquaredNorm() == 60.0);
-  
+
   assert(w_5.InnerProduct(x) == 30.0);
 
   w_5.ScaleBy(0.5);
@@ -43,7 +43,7 @@ int main (int argc, char** argv) {
   w_5.AsString();
   assert(w_5.GetSquaredNorm() == 15.0);
   assert(w_5.ValueOf(4) == 3.0);
-  
+
   SfWeightVector w_3(string("3.0 2.0 -1.0"));
   assert(w_3.GetDimensions() == 3);
   assert(w_3.ValueOf(0) == 3.0);
@@ -80,7 +80,7 @@ int main (int argc, char** argv) {
   assert(w_7.ValueOf(5) == -5);
   assert(w_7.GetSquaredNorm() == w_6.GetSquaredNorm());
   assert(w_7.GetDimensions() == w_6.GetDimensions());
-  
+
   w_6.ProjectToL1Ball(20);
   assert(w_6.ValueOf(0) == 0);
   assert(w_6.ValueOf(1) == 1);
