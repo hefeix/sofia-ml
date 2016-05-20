@@ -147,11 +147,12 @@ void SfSparseVector::Init(const char* in_string) {
   }
 
   // Get feature:value pairs.
-  for ( ;
-       (position < in_string + length
-        && position - 1 != NULL
-        && position[0] != '#');
-       position = strchr(position, ' ') + 1) {
+  for (position = position - 1;
+       (position < in_string + length - 1
+        && position != NULL
+        && position[1] != '#');
+       position = strchr(position, ' ')) {
+    position += 1;
 
     // Consume multiple spaces, if needed.
     if (position[0] == ' ' || position[0] == '\n' ||
